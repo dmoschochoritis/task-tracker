@@ -1,0 +1,5 @@
+#Contributiong
+
+  Branch naming: feature/, fix/, chore/
+  Commit convention: Conventional Commits (feat, fix, docs, chore)
+  All changes require a Pull Request into main
