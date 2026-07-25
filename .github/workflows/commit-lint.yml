@@ -4,11 +4,11 @@ on: [pull_request]
 
 jobs:
   check-commit-message:
-  runs-on: ubuntu-latest
-  steps:
-  -uses: actions/checkout@v4
-  -name: Validate commit message format
-  run: |
-    MSG=$(gi log-1 --pretty=%s)
-    echo "Checking commit: $MSG"
-    echo "$MSG" | grep -E"^(feat|fix|docs|chore|refactor|test)(\(.+\))?:"||(echo "XX Commit mesage does not follow Conventional Commits format"&& exit 1)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate commit message format
+        run: |
+          MSG=$(git log -1 --pretty=%s)
+          echo "Checking commit: $MSG"
+          echo "$MSG" | grep -E "^(feat|fix|docs|chore|refactor|test)(\(.+\))?: " || (echo "❌ Commit message does not follow Conventional Commits format" && exit 1)
