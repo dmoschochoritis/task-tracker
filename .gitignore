@@ -1,3 +1,4 @@
 node_modules/
 .env
 *.log
+# ignore build artifacts and secrets
