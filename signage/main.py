@@ -1,6 +1,10 @@
+from db import init_db
+
 from fastapi import FastAPI, HTTPException
 
 app = FastAPI(title="Mini Signage API")
+
+init_db()
 
 SCREENS = [
     {"id": 1, "name": "Lobby", "location": "Athens HQ"},
