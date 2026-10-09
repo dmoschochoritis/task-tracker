@@ -1,6 +1,9 @@
-from db import init_db
+import json
 
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+
+from db import get_connection, init_db
 
 app = FastAPI(title="Mini Signage API")
 
@@ -12,6 +15,10 @@ SCREENS = [
     {"id": 3, "name": "Window", "location": "Thessaloniki store"},
 ]
 
+class PlaylistIn(BaseModel):
+    name: str
+    items: list[str]
+
 @app.get("/screens")
 def list_screens():
     return SCREENS
@@ -22,3 +29,9 @@ def get_screen(screen_id: int):
         if screen["id"] == screen_id:
             return screen
     raise HTTPException(status_code=404, detail="Screen not found")
+
+@app.post("/playlists", status_code=201)
+def create_playlist(playlist: PlaylistIn):
+    with get_connection() as conn:
+        cur = conn.execute("INSERT INTO playlists (name, items) VALUES (?, ?)", (playlist.name, json.dumps(playlist.items)))
+    return {"id": cur.lastrowid, "name": playlist.name, "items": playlist.items}
