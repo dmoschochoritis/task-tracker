@@ -27,4 +27,3 @@ def test_assign_and_read_back(client):
     client.put("/screens/1/playlist", json={"playlist_id": 1})
     r = client.get("/screens/1/playlist")
     assert r.json()["name"] == "Morning"
-    
