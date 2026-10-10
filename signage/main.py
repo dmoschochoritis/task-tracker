@@ -33,7 +33,7 @@ def get_screen(screen_id: int):
             return screen
     raise HTTPException(status_code=404, detail="Screen not found")
 
-@app.post("/playlists", status_code=200)
+@app.post("/playlists", status_code=201)
 def create_playlist(playlist: PlaylistIn):
     with get_connection() as conn:
         cur = conn.execute("INSERT INTO playlists (name, items) VALUES (?, ?)", (playlist.name, json.dumps(playlist.items)))
