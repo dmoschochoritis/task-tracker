@@ -1,11 +1,15 @@
 import json
+import os
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from db import get_connection, init_db
 
 app = FastAPI(title="Mini Signage API")
+DASHBOARD_ORIGIN = os.environ.get("DASHBOARD_ORIGIN", "http://localhost:5500")
+app.add_middleware(CORSMiddleware, allow_origins=[DASHBOARD_ORIGIN], allow_methods=["GET", "POST", "PUT"], allow_headers=["Content-Type"])
 
 init_db()
 

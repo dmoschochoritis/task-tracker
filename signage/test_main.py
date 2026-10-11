@@ -33,3 +33,9 @@ def test_list_playlists(client):
     r = client.get("/playlists")
     assert r.status_code == 200
     assert [p["name"] for p in r.json()] == ["Morning"]
+
+def test_cors_allows_only_dashboard(client):
+    ok = client.get("/screens", headers={"Origin": "http://localhost:5500"})
+    bad = client.get("/screens", headers={"Origin": "https://evil.example"})
+    assert ok.headers.get("access-control-allow-origin") == "http://localhost:5500"
+    assert "access-control-allow-origin" not in bad.headers
