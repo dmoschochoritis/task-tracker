@@ -56,3 +56,9 @@ def get_screen_playlist(screen_id: int):
     if row is None:
         raise HTTPException(status_code=404, detail="No playlist assigned")
     return {"id": row["id"], "name": row["name"], "items": json.loads(row["items"])}
+
+@app.get("/playlists")
+def list_playlists():
+    with get_connection() as conn:
+        rows = conn.execute("SELECT id, name, items FROM playlists ORDER BY id").fetchall()
+    return [{"id": r["id"], "name": r["name"], "items": json.loads(r["items"])} for r in rows]

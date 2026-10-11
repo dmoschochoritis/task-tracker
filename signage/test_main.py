@@ -27,3 +27,9 @@ def test_assign_and_read_back(client):
     client.put("/screens/1/playlist", json={"playlist_id": 1})
     r = client.get("/screens/1/playlist")
     assert r.json()["name"] == "Morning"
+
+def test_list_playlists(client):
+    client.post("/playlists", json={"name": "Morning", "items": ["Hi"]})
+    r = client.get("/playlists")
+    assert r.status_code == 200
+    assert [p["name"] for p in r.json()] == ["Morning"]
