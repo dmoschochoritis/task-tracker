@@ -13,7 +13,7 @@ Data is stored in `signage.db`, created on first start (not committed).
 - `GET /screens/{id}` – one screen, 404 if unknown
 - `POST /playlists` – create a playlist, returns 201
 - `PUT /screens/{id}/playlist` – assign a playlist, 404 if screen or playlist unknown
-- `GET /screens/{id}/playlist` – assigned playlist, 404 if none assigned
+- `GET /screens/{id}/playlist` – assigned playlist; `null` (200) if none assigned; 404 if screen unknown
 - `GET /playlists` – list all playlists
 
 ## Run tests
