@@ -7,14 +7,13 @@ function showError(msg) {
 
 async function api(path, options) {
   const res = await fetch(`${API}${path}`, options);
-  if (!res.ok && res.status !== 404) throw new Error(`The API returned error ${res.status}.`);
+  if (!res.ok) throw new Error(`The API returned error ${res.status}.`);
   return res;
 }
 
 async function playlistName(screenId) {
-  const res = await api(`/screens/${screenId}/playlist`);
-  if (res.status === 404) return "no playlist";
-  return (await res.json()).name;
+  const playlist = await (await api(`/screens/${screenId}/playlist`)).json();
+  return playlist ? playlist.name : "no playlist";
 }
 
 async function loadScreens() {
