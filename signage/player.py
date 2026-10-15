@@ -16,6 +16,8 @@ def decide(status, body):
         return "No content assigned"
     return f"Playing {body['name']}: {', '.join(body['items'])}"
 
+offline = False
+
 def fetch(screen_id):
     try:
         with urllib.request.urlopen(f"{API}/screens/{screen_id}/playlist", timeout=5) as res:
@@ -25,15 +27,21 @@ def fetch(screen_id):
 
 
 def poll(screen_id, last):
+    global offline
     try:
         status, body = fetch(screen_id)
     except urllib.error.URLError:
         logging.warning("API unreachable, keeping last playlist")
+        offline = True
         return last
+    if offline:
+        logging.info("API reachable again")
+        offline = False
     return decide(status, body)
 
 
 def main():
+    logging.basicConfig(level=logging.INFO)
     screen_id = int(sys.argv[1])
     last = None
     while True:
