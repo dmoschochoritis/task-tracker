@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Signage Dashboard</title>
+</head>
+
+<body>
+    <h1>Screens</h1>
+    <p id="error" style="color: red"></p>
+    <ul id="screens"></ul>
+    <h2>New playlist</h2>
+    <form id="new-playlist">
+        <input id="pl-name" placeholder="Name" required>
+        <input id="pl-items" placeholder="Items, comma separated" required>
+        <button>Create</button>
+    </form>
+    <h2>Assign</h2>
+    <select id="assign-screen"></select>
+    <select id="assign-playlist"></select>
+    <button id="assign-btn">Assign</button>
+    <script src="app.js"></script>
+</body>
+
+</html>

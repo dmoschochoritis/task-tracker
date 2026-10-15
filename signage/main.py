@@ -1,11 +1,15 @@
 import json
+import os
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from db import get_connection, init_db
 
 app = FastAPI(title="Mini Signage API")
+DASHBOARD_ORIGIN = os.environ.get("DASHBOARD_ORIGIN", "http://localhost:5500")
+app.add_middleware(CORSMiddleware, allow_origins=[DASHBOARD_ORIGIN], allow_methods=["GET", "POST", "PUT"], allow_headers=["Content-Type"])
 
 init_db()
 
@@ -56,3 +60,9 @@ def get_screen_playlist(screen_id: int):
     if row is None:
         raise HTTPException(status_code=404, detail="No playlist assigned")
     return {"id": row["id"], "name": row["name"], "items": json.loads(row["items"])}
+
+@app.get("/playlists")
+def list_playlists():
+    with get_connection() as conn:
+        rows = conn.execute("SELECT id, name, items FROM playlists ORDER BY id").fetchall()
+    return [{"id": r["id"], "name": r["name"], "items": json.loads(r["items"])} for r in rows]
