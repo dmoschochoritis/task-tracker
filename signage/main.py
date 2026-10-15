@@ -55,10 +55,12 @@ def assign_playlist(screen_id: int, body: AssignIn):
 
 @app.get("/screens/{screen_id}/playlist")
 def get_screen_playlist(screen_id: int):
+    if not any(s["id"] == screen_id for s in SCREENS):
+        raise HTTPException(status_code=404, detail="Screen not found")
     with get_connection() as conn:
         row = conn.execute("SELECT p.id, p.name, p.items FROM assignments a JOIN playlists p ON p.id = a.playlist_id WHERE a.screen_id = ?", (screen_id,)).fetchone()
     if row is None:
-        raise HTTPException(status_code=404, detail="No playlist assigned")
+        return None
     return {"id": row["id"], "name": row["name"], "items": json.loads(row["items"])}
 
 @app.get("/playlists")

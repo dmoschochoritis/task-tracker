@@ -39,3 +39,13 @@ def test_cors_allows_only_dashboard(client):
     bad = client.get("/screens", headers={"Origin": "https://evil.example"})
     assert ok.headers.get("access-control-allow-origin") == "http://localhost:5500"
     assert "access-control-allow-origin" not in bad.headers
+
+def test_screen_without_playlist_returns_null(client):
+    r = client.get("/screens/2/playlist")
+    assert r.status_code == 200
+    assert r.json() is None
+
+
+def test_playlist_of_unknown_screen_returns_404(client):
+    r = client.get("/screens/99/playlist")
+    assert r.status_code == 404
